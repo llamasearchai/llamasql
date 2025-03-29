@@ -1,0 +1,115 @@
+@startuml LlamaDB Architecture
+
+' Define colors and styles
+!define PYTHON_COLOR #4B8BBE
+!define RUST_COLOR #F74C00
+!define MLX_COLOR #00ADD8
+!define STORAGE_COLOR #6DB33F
+!define CLIENT_COLOR #F7DF1E
+!define ARROW_COLOR #666666
+!define BACKGROUND_COLOR #FFFFFF
+!define BORDER_COLOR #CCCCCC
+
+' Set diagram style
+skinparam backgroundColor BACKGROUND_COLOR
+skinparam roundCorner 15
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+skinparam rectangleBorderColor BORDER_COLOR
+skinparam rectangleBorderThickness 1
+skinparam arrowColor ARROW_COLOR
+skinparam arrowThickness 1.5
+skinparam componentBorderColor BORDER_COLOR
+skinparam componentBorderThickness 1
+
+' Title
+title LlamaDB - Hybrid Python/Rust Data Platform with MLX Acceleration
+
+' Main container
+rectangle "LlamaDB - Hybrid Python/Rust Data Platform" {
+  ' Python Core
+  rectangle "Python Core" as PythonCore #PYTHON_COLOR {
+    rectangle "API Layer" as APILayer {
+      [FastAPI REST API]
+      [CLI Interface]
+      [Python SDK]
+    }
+    
+    rectangle "Core Logic" as CoreLogic {
+      [Query Orchestration]
+      [Data Processing]
+      [Plugin System]
+    }
+  }
+  
+  ' Rust Extensions
+  rectangle "Rust Extensions" as RustExtensions #RUST_COLOR {
+    rectangle "High-Performance Operations" as RustOps {
+      [Vector Operations]
+      [Text Processing]
+      [SQL Parsing]
+    }
+    
+    rectangle "Memory Management" as MemoryMgmt {
+      [Efficient Data Structures]
+      [Zero-Copy Operations]
+    }
+  }
+  
+  ' MLX Acceleration
+  rectangle "MLX Acceleration" as MLXAccel #MLX_COLOR {
+    rectangle "Vector Operations" as MLXVectorOps {
+      [Cosine Similarity]
+      [Euclidean Distance]
+    }
+    
+    rectangle "Matrix Operations" as MLXMatrixOps {
+      [Matrix Multiplication]
+      [Dimensionality Reduction]
+    }
+  }
+  
+  ' Storage Layer
+  rectangle "Storage Layer" as StorageLayer #STORAGE_COLOR {
+    rectangle "Vector Storage" as VectorStorage {
+      [FAISS Integration]
+      [HNSW Index]
+    }
+    
+    rectangle "Relational Storage" as RelationalStorage {
+      [SQLite]
+      [PostgreSQL]
+    }
+  }
+}
+
+' External components
+rectangle "Clients" as Clients #CLIENT_COLOR {
+  [Web Applications]
+  [Python Scripts]
+  [Notebooks]
+}
+
+' Connections
+Clients --> APILayer : HTTP/WebSockets
+CoreLogic --> RustExtensions : PyO3/Maturin
+RustExtensions --> MLXAccel : Conditional\nAcceleration
+CoreLogic --> MLXAccel : Direct\nAcceleration
+CoreLogic --> StorageLayer : Data Access
+RustExtensions --> StorageLayer : Optimized\nAccess
+APILayer --> CoreLogic : Requests
+
+' Notes
+note right of MLXAccel
+  MLX acceleration is automatically
+  enabled on Apple Silicon devices
+  with graceful fallback to NumPy
+end note
+
+note bottom of RustExtensions
+  Rust extensions provide 10-30x
+  performance boost for critical
+  operations
+end note
+
+@enduml 

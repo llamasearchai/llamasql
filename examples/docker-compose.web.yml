@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  rag-web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - CHUNK_SIZE=600
+      - CHUNK_OVERLAP=100
+      - MAX_TOKENS=600
+    deploy:
+      resources:
+        limits:
+          memory: 4G 

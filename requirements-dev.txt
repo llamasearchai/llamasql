@@ -1,0 +1,28 @@
+# Testing
+pytest>=8.0.0,<8.1.0
+pytest-asyncio>=0.23.0,<0.24.0
+pytest-cov>=4.1.0,<4.2.0
+pytest-benchmark>=4.0.0,<4.1.0
+pytest-mock>=3.12.0,<3.13.0
+hypothesis>=6.92.1,<6.93.0
+
+# Code quality
+ruff>=0.2.0,<0.3.0
+black>=23.11.0,<24.0.0
+mypy>=1.7.0,<1.8.0
+isort>=5.13.0,<5.14.0
+
+# Security testing
+bandit>=1.7.6,<1.8.0
+safety>=2.3.5,<2.4.0
+
+# Documentation
+sphinx>=7.2.6,<7.3.0
+sphinx-rtd-theme>=2.0.0,<2.1.0
+
+# CI/CD
+tox>=4.11.4,<4.12.0
+coherent.build>=0.27.1,<0.28.0
+twine>=4.0.2,<4.1.0
+bump2version>=1.0.1,<1.1.0
+pre-commit>=3.5.0,<3.6.0

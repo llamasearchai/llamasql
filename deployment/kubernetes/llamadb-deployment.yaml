@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llamadb
+  labels:
+    app: llamadb
+    component: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: llamadb
+      component: api
+  template:
+    metadata:
+      labels:
+        app: llamadb
+        component: api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8000"
+    spec:
+      containers:
+      - name: llamadb-api
+        image: llamadb/llamadb:3.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: api
+        env:
+        - name: LLAMADB_ENVIRONMENT
+          value: "production"
+        - name: LLAMADB_LOG_LEVEL
+          value: "INFO"
+        - name: LLAMADB_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: llamadb-secrets
+              key: database-url
+        - name: LLAMADB_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llamadb-secrets
+              key: secret-key
+        - name: LLAMADB_ANTHROPIC_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llamadb-secrets
+              key: anthropic-api-key
+              optional: true
+        - name: LLAMADB_OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llamadb-secrets
+              key: openai-api-key
+              optional: true
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+        - name: llamadb-data
+          mountPath: /app/data
+      volumes:
+      - name: llamadb-data
+        persistentVolumeClaim:
+          claimName: llamadb-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llamadb-service
+  labels:
+    app: llamadb
+spec:
+  selector:
+    app: llamadb
+    component: api
+  ports:
+  - port: 80
+    targetPort: 8000
+    name: http
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: llamadb-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - llamadb.example.com
+    secretName: llamadb-tls
+  rules:
+  - host: llamadb.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: llamadb-service
+            port:
+              name: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: llamadb-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard 

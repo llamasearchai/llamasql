@@ -1,0 +1,27 @@
+[package]
+name = "llamadb_core"
+version = "0.1.0"
+edition = "2021"
+authors = ["LlamaDB Team <info@llamadb.example.com>"]
+description = "Rust extensions for LlamaDB"
+license = "Apache-2.0"
+repository = "https://github.com/yourusername/llamadb"
+
+[lib]
+name = "llamadb_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.20.0", features = ["extension-module"] }
+numpy = "0.20.0"
+ndarray = "0.15.6"
+rayon = "1.8.0"
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
+thiserror = "1.0.50"
+anyhow = "1.0.75"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3

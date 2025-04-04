@@ -103,14 +103,14 @@ classifiers = [
 ]
 
 setup(
-    name="llamadb",
+    name="llamadb-llamasearch",
     version=version,
     description="Next-Gen Hybrid Python/Rust Data Platform with MLX",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="LlamaDB Team",
-    author_email="info@llamadb.example.com",
-    url="https://github.com/yourusername/llamadb",
+    author="LlamaSearch AI",
+    author_email="nikjois@llamasearch.ai",
+    url="https://llamasearch.ai",
     packages=find_packages(where="python"),
     package_dir={"": "python"},
     package_data=package_data,

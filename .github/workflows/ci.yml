@@ -1,0 +1,162 @@
+name: LlamaDB CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+      
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -e ".[dev,test]"
+        
+    - name: Install MLX on macOS Apple Silicon
+      if: runner.os == 'macOS' && runner.arch == 'arm64'
+      run: |
+        python -m pip install mlx
+        
+    - name: Lint with ruff
+      run: |
+        ruff check python/
+        
+    - name: Type check with mypy
+      run: |
+        mypy python/
+        
+    - name: Test with pytest
+      run: |
+        pytest tests/ --cov=llamadb
+        
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: false
+
+  build:
+    name: Build package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.11"]
+        
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+      
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+      
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install build wheel setuptools-rust maturin
+        
+    - name: Build package
+      run: |
+        python -m build
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: dist-${{ matrix.os }}-${{ matrix.python-version }}
+        path: dist/
+
+  publish:
+    name: Publish package
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+        
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: dist
+        
+    - name: Prepare distribution
+      run: |
+        mkdir -p dist_combined
+        find dist -name "*.whl" -o -name "*.tar.gz" | xargs -I{} cp {} dist_combined/
+    
+    - name: Check if publishing is possible
+      id: check_publishing
+      shell: bash
+      run: |
+        # Safely check for token without directly accessing it
+        # GitHub will redact any direct access to secrets in logs
+        if [[ "$HAS_PYPI_TOKEN" == "true" ]]; then
+          echo "can_publish=true" >> $GITHUB_OUTPUT
+          echo "use_mock_token=false" >> $GITHUB_OUTPUT
+          echo "PyPI token is available, can proceed with publishing"
+        else
+          echo "can_publish=true" >> $GITHUB_OUTPUT
+          echo "use_mock_token=true" >> $GITHUB_OUTPUT
+          echo "::warning::Using mock PyPI token for testing. This will publish to TestPyPI instead."
+        fi
+      env:
+        # Check for token existence without accessing its value
+        HAS_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN != '' }}
+        
+    # Set up credentials based on token availability
+    - name: Set up PyPI credentials
+      id: pypi_setup
+      if: steps.check_publishing.outputs.can_publish == 'true'
+      run: |
+        if [[ "${{ steps.check_publishing.outputs.use_mock_token }}" == "true" ]]; then
+          echo "token=mock_pypi_token_for_testing_only" >> $GITHUB_OUTPUT
+          echo "repo_url=https://test.pypi.org/legacy/" >> $GITHUB_OUTPUT
+        else
+          # The real token is passed securely through the environment
+          echo "repo_url=" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Publish to PyPI
+      if: steps.check_publishing.outputs.can_publish == 'true'
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ steps.check_publishing.outputs.use_mock_token == 'true' && steps.pypi_setup.outputs.token || secrets.PYPI_TOKEN }}
+        packages-dir: dist_combined/
+        skip-existing: true
+        repository-url: ${{ steps.pypi_setup.outputs.repo_url }}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1200" height="600" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4B8BBE" />
+      <stop offset="100%" stop-color="#F74C00" />
+    </linearGradient>
+    <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F0F0F0" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" />
+      <feOffset dx="0" dy="4" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="600" fill="url(#bg-gradient)" />
+
+  <!-- Grid pattern -->
+  <g stroke="#FFFFFF" stroke-width="0.5" stroke-opacity="0.1">
+    <g id="vertical-lines">
+      <line x1="100" y1="0" x2="100" y2="600" />
+      <line x1="200" y1="0" x2="200" y2="600" />
+      <line x1="300" y1="0" x2="300" y2="600" />
+      <line x1="400" y1="0" x2="400" y2="600" />
+      <line x1="500" y1="0" x2="500" y2="600" />
+      <line x1="600" y1="0" x2="600" y2="600" />
+      <line x1="700" y1="0" x2="700" y2="600" />
+      <line x1="800" y1="0" x2="800" y2="600" />
+      <line x1="900" y1="0" x2="900" y2="600" />
+      <line x1="1000" y1="0" x2="1000" y2="600" />
+      <line x1="1100" y1="0" x2="1100" y2="600" />
+    </g>
+    <g id="horizontal-lines">
+      <line x1="0" y1="100" x2="1200" y2="100" />
+      <line x1="0" y1="200" x2="1200" y2="200" />
+      <line x1="0" y1="300" x2="1200" y2="300" />
+      <line x1="0" y1="400" x2="1200" y2="400" />
+      <line x1="0" y1="500" x2="1200" y2="500" />
+    </g>
+  </g>
+
+  <!-- Decorative elements -->
+  <g id="decorative-elements" opacity="0.7">
+    <!-- Python symbol -->
+    <g transform="translate(200, 150) scale(0.8)" filter="url(#glow)">
+      <path d="M 50,0 C 22.4,0 0,22.4 0,50 v 50 c 0,27.6 22.4,50 50,50 h 50 c 27.6,0 50,-22.4 50,-50 V 50 C 150,22.4 127.6,0 100,0 Z" fill="#4B8BBE" />
+      <path d="M 50,20 C 33.4,20 20,33.4 20,50 v 50 c 0,16.6 13.4,30 30,30 h 50 c 16.6,0 30,-13.4 30,-30 V 50 C 130,33.4 116.6,20 100,20 Z" fill="#FFD43B" />
+      <circle cx="75" cy="75" r="15" fill="#4B8BBE" />
+    </g>
+    
+    <!-- Rust symbol -->
+    <g transform="translate(950, 150) scale(0.8)" filter="url(#glow)">
+      <circle cx="75" cy="75" r="75" fill="#F74C00" />
+      <path d="M 75,25 L 125,75 L 75,125 L 25,75 Z" fill="#FFFFFF" />
+    </g>
+    
+    <!-- MLX symbol -->
+    <g transform="translate(575, 450) scale(0.8)" filter="url(#glow)">
+      <rect x="25" y="25" width="100" height="100" rx="15" ry="15" fill="#00ADD8" />
+      <text x="75" y="95" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="#FFFFFF">MLX</text>
+    </g>
+  </g>
+
+  <!-- Main title -->
+  <g filter="url(#shadow)">
+    <text x="600" y="180" font-family="Arial, sans-serif" font-size="80" font-weight="bold" text-anchor="middle" fill="url(#text-gradient)">LlamaDB</text>
+    <text x="600" y="250" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" fill="#FFFFFF">Next-Gen Hybrid Python/Rust Data Platform</text>
+    <text x="600" y="290" font-family="Arial, sans-serif" font-size="32" font-weight="normal" text-anchor="middle" fill="#FFFFFF">with MLX Acceleration</text>
+  </g>
+
+  <!-- Feature highlights -->
+  <g font-family="Arial, sans-serif" fill="#FFFFFF" text-anchor="middle">
+    <g transform="translate(300, 380)">
+      <circle cx="0" cy="0" r="60" fill="#4B8BBE" opacity="0.7" />
+      <text x="0" y="10" font-size="24" font-weight="bold">Python</text>
+      <text x="0" y="40" font-size="16">Rapid Development</text>
+    </g>
+    
+    <g transform="translate(600, 380)">
+      <circle cx="0" cy="0" r="60" fill="#F74C00" opacity="0.7" />
+      <text x="0" y="10" font-size="24" font-weight="bold">Rust</text>
+      <text x="0" y="40" font-size="16">High Performance</text>
+    </g>
+    
+    <g transform="translate(900, 380)">
+      <circle cx="0" cy="0" r="60" fill="#00ADD8" opacity="0.7" />
+      <text x="0" y="10" font-size="24" font-weight="bold">MLX</text>
+      <text x="0" y="40" font-size="16">Apple Silicon</text>
+    </g>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="520" font-family="Arial, sans-serif" font-size="24" font-weight="normal" text-anchor="middle" fill="#FFFFFF" opacity="0.9">Enterprise-Ready Solution for Modern Data Analytics</text>
+</svg> 

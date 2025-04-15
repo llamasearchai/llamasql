@@ -1,0 +1,5 @@
+llamadb>=0.3.0
+openai>=1.0.0
+numpy>=1.20.0
+python-dotenv>=0.19.0
+tqdm>=4.62.0 

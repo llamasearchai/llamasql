@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4B8BBE" />
+      <stop offset="100%" stop-color="#F74C00" />
+    </linearGradient>
+    
+    <!-- Llama silhouette -->
+    <path id="llama-path" d="M400,180 C360,180 330,200 310,230 C290,260 280,300 280,340 C280,380 290,420 310,450 C330,480 360,500 400,500 C440,500 470,480 490,450 C510,420 520,380 520,340 C520,300 510,260 490,230 C470,200 440,180 400,180 Z M350,280 C360,280 370,290 370,300 C370,310 360,320 350,320 C340,320 330,310 330,300 C330,290 340,280 350,280 Z M450,280 C460,280 470,290 470,300 C470,310 460,320 450,320 C440,320 430,310 430,300 C430,290 440,280 450,280 Z M400,350 C420,350 440,360 450,380 L430,390 C425,380 415,370 400,370 C385,370 375,380 370,390 L350,380 C360,360 380,350 400,350 Z M310,450 C310,450 320,480 350,500 C380,520 420,520 450,500 C480,480 490,450 490,450 L520,470 C520,470 500,510 460,540 C420,570 380,570 340,540 C300,510 280,470 280,470 L310,450 Z" />
+    
+    <!-- Database icon -->
+    <path id="db-path" d="M400,520 C320,520 260,500 260,475 L260,625 C260,650 320,670 400,670 C480,670 540,650 540,625 L540,475 C540,500 480,520 400,520 Z M400,450 C480,450 540,430 540,405 L540,555 C540,580 480,600 400,600 C320,600 260,580 260,555 L260,405 C260,430 320,450 400,450 Z M400,380 C480,380 540,360 540,335 L540,485 C540,510 480,530 400,530 C320,530 260,510 260,485 L260,335 C260,360 320,380 400,380 Z M400,310 C320,310 260,335 260,360 C260,385 320,410 400,410 C480,410 540,385 540,360 C540,335 480,310 400,310 Z" />
+    
+    <!-- Python logo -->
+    <path id="python-path" d="M230,350 C220,350 210,360 210,370 L210,430 C210,440 220,450 230,450 L290,450 C300,450 310,440 310,430 L310,370 C310,360 300,350 290,350 L230,350 Z M260,370 C270,370 280,380 280,390 C280,400 270,410 260,410 C250,410 240,400 240,390 C240,380 250,370 260,370 Z" />
+    
+    <!-- Rust logo -->
+    <path id="rust-path" d="M510,350 C500,350 490,360 490,370 L490,430 C490,440 500,450 510,450 L570,450 C580,450 590,440 590,430 L590,370 C590,360 580,350 570,350 L510,350 Z M540,370 C550,370 560,380 560,390 C560,400 550,410 540,410 C530,410 520,400 520,390 C520,380 530,370 540,370 Z" />
+    
+    <!-- MLX logo -->
+    <path id="mlx-path" d="M370,550 C360,550 350,560 350,570 L350,630 C350,640 360,650 370,650 L430,650 C440,650 450,640 450,630 L450,570 C450,560 440,550 430,550 L370,550 Z M400,570 C410,570 420,580 420,590 C420,600 410,610 400,610 C390,610 380,600 380,590 C380,580 390,570 400,570 Z" />
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="800" height="800" rx="40" ry="40" fill="url(#bg-gradient)" />
+  
+  <!-- Grid pattern -->
+  <g stroke="#FFFFFF" stroke-width="1" opacity="0.1">
+    <!-- Vertical lines -->
+    <line x1="100" y1="0" x2="100" y2="800" />
+    <line x1="200" y1="0" x2="200" y2="800" />
+    <line x1="300" y1="0" x2="300" y2="800" />
+    <line x1="400" y1="0" x2="400" y2="800" />
+    <line x1="500" y1="0" x2="500" y2="800" />
+    <line x1="600" y1="0" x2="600" y2="800" />
+    <line x1="700" y1="0" x2="700" y2="800" />
+    
+    <!-- Horizontal lines -->
+    <line x1="0" y1="100" x2="800" y2="100" />
+    <line x1="0" y1="200" x2="800" y2="200" />
+    <line x1="0" y1="300" x2="800" y2="300" />
+    <line x1="0" y1="400" x2="800" y2="400" />
+    <line x1="0" y1="500" x2="800" y2="500" />
+    <line x1="0" y1="600" x2="800" y2="600" />
+    <line x1="0" y1="700" x2="800" y2="700" />
+  </g>
+  
+  <!-- Llama silhouette -->
+  <use href="#llama-path" fill="#FFFFFF" opacity="0.9" filter="url(#glow)" />
+  
+  <!-- Database icon -->
+  <use href="#db-path" fill="#FFFFFF" opacity="0.8" />
+  
+  <!-- Technology icons with glow -->
+  <g filter="url(#glow)">
+    <!-- Python logo -->
+    <use href="#python-path" fill="#4B8BBE" />
+    
+    <!-- Rust logo -->
+    <use href="#rust-path" fill="#F74C00" />
+    
+    <!-- MLX logo -->
+    <use href="#mlx-path" fill="#00ADD8" />
+  </g>
+  
+  <!-- LlamaDB text -->
+  <text x="400" y="750" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="#FFFFFF">
+    LlamaDB
+  </text>
+  
+  <!-- Tagline -->
+  <text x="400" y="780" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="#FFFFFF" opacity="0.8">
+    High-Performance Vector Database
+  </text>
+</svg> 

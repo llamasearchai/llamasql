@@ -1,0 +1,26 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY update_requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application files
+COPY rag_example.py .
+COPY rag_web_app.py .
+COPY .env.example .env
+
+# Create required directories
+RUN mkdir -p templates data
+
+# Create templates on startup
+ENV FLASK_APP=rag_web_app.py
+ENV HOST=0.0.0.0
+ENV PORT=8000
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Command to run the app
+CMD ["python", "rag_web_app.py"] 
